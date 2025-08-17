@@ -1,0 +1,34 @@
+<!-- sticky_notes/notes/templates/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}Sticky Notes{% endblock title %}
+    </title>
+    <!-- ADDED: Link to your static CSS file -->
+    <link rel="stylesheet" href="{% static 'notes/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>
+            {% block header %}Sticky Notes{% endblock header %}
+        </h1>
+        <nav>
+            <a href="{% url 'note_list' %}">All Notes</a>
+            <a href="{% url 'note_create' %}">Create New Note</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sticky Notes App by GB</p>
+    </footer>
+</body>
+</html>

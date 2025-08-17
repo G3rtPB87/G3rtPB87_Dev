@@ -1,0 +1,23 @@
+<!-- sticky_notes/notes/templates/notes/note_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Sticky Notes{% endblock %}
+
+{% block header %}All Notes{% endblock %}
+
+{% block content %}
+    <h2>All Sticky Notes</h2>
+    <a href="{% url 'note_create' %}">Create a new note</a>
+    <ul>
+        {% for note in notes %}
+            <li>
+                <h3><a href="{% url 'note_detail' pk=note.pk %}">{{ note.title }}</a></h3>
+                <p>{{ note.content|truncatechars:100 }}</p>
+                <a href="{% url 'note_update' pk=note.pk %}">Edit</a> |
+                <a href="{% url 'note_delete' pk=note.pk %}">Delete</a>
+            </li>
+        {% empty %}
+            <li>No sticky notes found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
