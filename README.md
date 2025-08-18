@@ -40,7 +40,7 @@ Follow these steps to set up and run the project on your local machine:
 
 1\.  \*\*Clone the repository:\*\*  
     \`\`\`bash  
-    git clone https://github.com/G3rtPB87/G3rtPB87\_Dev.git  
+    git clone [https://github.com/G3rtPB87/G3rtPB87\_Dev.git](https://github.com/G3rtPB87/G3rtPB87_Dev.git)  
     \`\`\`
 
 2\.  \*\*Navigate to the project directory:\*\*  
