@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen p-8">
+    <!-- Navigation Bar -->
+    <nav class="w-full bg-gray-900 p-4 rounded-lg shadow-lg mb-8 flex justify-between items-center max-w-4xl">
+        <h1 class="text-xl font-bold text-white">GB's Online Market</h1>
+        <div class="space-x-4">
+            <a href="{% url 'product_list' %}" class="text-gray-300 hover:text-white">Products</a>
+            <a href="{% url 'view_cart' %}" class="text-gray-300 hover:text-white relative">
+                Cart
+                {% if cart_item_count > 0 %}
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{ cart_item_count }}</span>
+                {% endif %}
+            </a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="text-gray-300 hover:text-white">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-gray-300 hover:text-white">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-white mb-6">Explore Our Products</h2>
+        
+        <!-- Conditional buttons for vendors and buyers -->
+        {% if user.is_authenticated %}
+            <div class="mb-6 flex space-x-4">
+                <a href="{% url 'welcome' %}" class="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700">Back to Welcome</a>
+                {% if user.groups.all.0.name == 'Vendors' %}
+                    <a href="{% url 'list_stores' %}" class="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700">Manage My Stores</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for product in products %}
+                <div class="bg-gray-700 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-white mb-2">{{ product.name }}</h3>
+                    <p class="text-gray-400 mb-4">{{ product.description }}</p>
+                    <p class="text-sm text-gray-500 mb-2">From: {{ product.store.name }}</p>
+                    <div class="flex items-center justify-between">
+                        <p class="text-green-400 font-semibold text-lg">R{{ product.price }}</p>
+                        <!-- Form to add the product to the cart -->
+                        <form method="post" action="{% url 'add_to_cart' %}" class="flex items-center space-x-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <input type="number" name="quantity" value="1" min="1" class="w-16 px-2 py-1 rounded-md bg-gray-600 text-white border-gray-500 text-center">
+                            <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">Add to Cart</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Review section -->
+                    <div class="mt-4 border-t border-gray-600 pt-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">Reviews</h4>
+                        {% if user.is_authenticated and user.groups.all.0.name == 'Buyers' %}
+                            <form method="post" action="{% url 'submit_review' product_id=product.id %}" class="mb-4">
+                                {% csrf_token %}
+                                <textarea name="review_text" rows="2" class="w-full px-3 py-2 text-white bg-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Write a review..."></textarea>
+                                <button type="submit" class="mt-2 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Submit Review</button>
+                            </form>
+                        {% else %}
+                            <p class="text-sm text-gray-400">Please <a href="{% url 'login' %}" class="text-blue-400 hover:underline">log in</a> to leave a review.</p>
+                        {% endif %}
+                        
+                        <!-- Displaying existing reviews -->
+                        <div class="space-y-4">
+                            {% for review in product.review_set.all %}
+                                <div class="bg-gray-800 p-3 rounded-lg">
+                                    <p class="text-white">{{ review.text }}</p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        by {{ review.user.username }} 
+                                        {% if review.is_verified %}
+                                            <span class="text-green-400 font-bold ml-1">✓ Verified Buyer</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            {% empty %}
+                                <p class="text-sm text-gray-500">No reviews yet.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-span-full text-center text-gray-400 p-8 rounded-lg border-2 border-dashed border-gray-600">
+                    There are no products available at this time.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

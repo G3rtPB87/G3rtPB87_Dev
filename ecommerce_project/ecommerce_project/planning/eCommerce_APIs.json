@@ -1,0 +1,273 @@
+{
+	"info": {
+		"_postman_id": "f5e6a0d2-9c3f-42b7-8d26-1b4e054d5b24",
+		"name": "Django eCommerce API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Vendor API - Create Store",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vendor_username\": \"{{vendor_username}}\",\n    \"name\": \"My New API Store\",\n    \"description\": \"This store was created via the API!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/ecommerce_app/api/stores/create/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ecommerce_app",
+						"api",
+						"stores",
+						"create",
+						""
+					]
+				},
+				"description": "Allows a vendor to create a new store."
+			},
+			"response": []
+		},
+		{
+			"name": "Vendor API - Add Product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"store\": 1, \n    \"name\": \"API Product\",\n    \"description\": \"This product was added via the API.\",\n    \"price\": 199.99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/ecommerce_app/api/products/add/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ecommerce_app",
+						"api",
+						"products",
+						"add",
+						""
+					]
+				},
+				"description": "Allows a vendor to add a new product to their store."
+			},
+			"response": []
+		},
+		{
+			"name": "Vendor API - Retrieve Reviews",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/ecommerce_app/api/reviews/vendor/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ecommerce_app",
+						"api",
+						"reviews",
+						"vendor",
+						""
+					]
+				},
+				"description": "Allows a vendor to retrieve reviews for all their products."
+			},
+			"response": []
+		},
+		{
+			"name": "Public API - Get All Stores",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/ecommerce_app/api/stores/all/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ecommerce_app",
+						"api",
+						"stores",
+						"all",
+						""
+					]
+				},
+				"description": "Retrieves a list of all stores for all users."
+			},
+			"response": []
+		},
+		{
+			"name": "Public API - Get All Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/ecommerce_app/api/products/all/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ecommerce_app",
+						"api",
+						"products",
+						"all",
+						""
+					]
+				},
+				"description": "Retrieves a list of all products from all stores."
+			},
+			"response": []
+		},
+		{
+			"name": "Vendor API - Get My Stores",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "{{vendor_username}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{vendor_password}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/ecommerce_app/api/stores/vendor/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ecommerce_app",
+						"api",
+						"stores",
+						"vendor",
+						""
+					]
+				},
+				"description": "Retrieves a list of all stores owned by the authenticated vendor."
+			},
+			"response": []
+		},
+		{
+			"name": "Vendor API - Get My Products (XML)",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "{{vendor_username}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{vendor_password}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/ecommerce_app/api/products/vendor/xml/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ecommerce_app",
+						"api",
+						"products",
+						"vendor",
+						"xml",
+						""
+					]
+				},
+				"description": "Retrieves a list of all products owned by the authenticated vendor in XML format."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "vendor_username",
+			"value": "your_vendor_username"
+		},
+		{
+			"key": "vendor_password",
+			"value": "your_vendor_password"
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "username",
+				"value": "{{vendor_username}}",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "{{vendor_password}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": []
+}

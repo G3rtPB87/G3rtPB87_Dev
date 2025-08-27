@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-8">
+    <!-- Navigation Bar -->
+    <nav class="w-full bg-gray-900 p-4 rounded-lg shadow-lg mb-8 flex justify-between items-center max-w-4xl">
+        <h1 class="text-xl font-bold text-white">GB's Online Market</h1>
+        <div class="space-x-4">
+            <a href="{% url 'product_list' %}" class="text-gray-300 hover:text-white">Products</a>
+            <a href="{% url 'view_cart' %}" class="text-gray-300 hover:text-white">Cart</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="text-gray-300 hover:text-white">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-gray-300 hover:text-white">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto text-center">
+        <h2 class="text-3xl font-bold text-white mb-4">Welcome!</h2>
+        <p class="text-gray-400 text-lg mb-6">Hello, {{ user.username }}! You are successfully logged in.</p>
+        
+        <div class="mt-6 flex flex-col space-y-4">
+            <!-- New button to view all products for a buyer -->
+            <a href="{% url 'product_list' %}" class="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">View All Products</a>
+
+            <!-- New button for vendors to manage stores -->
+            {% if user.groups.all.0.name == 'Vendors' %}
+                <a href="{% url 'list_stores' %}" class="inline-block bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">Manage My Stores</a>
+            {% endif %}
+
+            <a href="{% url 'logout' %}" class="inline-block bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Log Out</a>
+        </div>
+    </div>
+</body>
+</html>

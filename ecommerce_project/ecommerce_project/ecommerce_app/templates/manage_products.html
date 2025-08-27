@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products - {{ store.name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen p-8">
+    <!-- Navigation Bar -->
+    <nav class="w-full bg-gray-900 p-4 rounded-lg shadow-lg mb-8 flex justify-between items-center max-w-4xl">
+        <h1 class="text-xl font-bold text-white">GB's Online Market</h1>
+        <div class="space-x-4">
+            <a href="{% url 'product_list' %}" class="text-gray-300 hover:text-white">Products</a>
+            <a href="{% url 'view_cart' %}" class="text-gray-300 hover:text-white">Cart</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="text-gray-300 hover:text-white">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-gray-300 hover:text-white">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-white mb-6">Manage Products for {{ store.name }}</h2>
+
+        <!-- Back button to return to the stores list -->
+        <div class="mb-6 text-center">
+            <a href="{% url 'list_stores' %}" class="inline-block bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">← Back to My Stores</a>
+        </div>
+
+        <!-- Product Creation Form -->
+        <div class="bg-gray-700 p-6 rounded-lg mb-8">
+            <h3 class="text-xl font-semibold text-white mb-4">Add a New Product</h3>
+            <form method="post" action="{% url 'manage_products' store_id=store.id %}">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-400 text-sm font-semibold mb-2">Product Name</label>
+                    <input type="text" id="name" name="name" class="w-full px-4 py-2 border rounded-md bg-gray-600 text-white border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-400 text-sm font-semibold mb-2">Description</label>
+                    <textarea id="description" name="description" class="w-full px-4 py-2 border rounded-md bg-gray-600 text-white border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-6">
+                    <label for="price" class="block text-gray-400 text-sm font-semibold mb-2">Price</label>
+                    <input type="number" step="0.01" id="price" name="price" class="w-full px-4 py-2 border rounded-md bg-gray-600 text-white border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Add Product</button>
+            </form>
+        </div>
+
+        <!-- Product List -->
+        <div class="bg-gray-700 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold text-white mb-4">Current Products</h3>
+            {% if products %}
+                <ul class="divide-y divide-gray-600">
+                    {% for product in products %}
+                        <li class="py-4 flex justify-between items-center">
+                            <div>
+                                <h4 class="text-lg font-bold text-blue-400">{{ product.name }}</h4>
+                                <p class="text-gray-400 mt-1">{{ product.description }}</p>
+                                <p class="text-green-400 mt-1 font-semibold">R{{ product.price }}</p>
+                            </div>
+                            <div class="space-x-2">
+                                <a href="{% url 'edit_product' product_id=product.id %}" class="bg-blue-600 text-white py-1 px-3 rounded-md hover:bg-blue-700">Edit</a>
+                                <a href="{% url 'delete_product' product_id=product.id %}" class="bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700">Delete</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="text-center text-gray-400 p-8 rounded-lg border-2 border-dashed border-gray-600">
+                    No products have been added to this store yet.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
