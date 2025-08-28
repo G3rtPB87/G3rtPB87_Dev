@@ -23,69 +23,44 @@ def add_store_api(request):
     API endpoint for vendors to create a new store.
     """
     if request.method == 'POST':
-        # Retrieve the authenticated user's ID
+        # IMPROVED: Use request.user.id directly from the authenticated user
         authenticated_user_id = request.user.id
 
-        # Get the vendor username and store name from the request data
-        vendor_username = request.data.get('vendor_username')
+        # IMPROVED: Remove the need to pass vendor_username in the payload
         store_name = request.data.get('name')
+        store_description = request.data.get('description')
 
-        # IMPROVED: Check if a store with the same
-        # name already exists for the authenticated user
+        # IMPROVED: Check if a store with the same name already
+        # exists for the authenticated user
         if Store.objects.filter(
-            name=store_name, vendor=authenticated_user_id
+            name=store_name,
+            vendor=authenticated_user_id
         ).exists():
             return JsonResponse(
                 {
                     'error': (
                         (
-                            (
-                                'A store with this name already exists '
-                                'for your account.'
-                            )
+                            'A store with this name already exists for your '
+                            'account.'
                         )
                     )
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        try:
-            # Find the User ID associated with the provided username
-            vendor_user = User.objects.get(username=vendor_username)
-            vendor_id_from_payload = vendor_user.id
-        except User.DoesNotExist:
+        # Create a mutable copy of the request data and add the vendor ID
+        mutable_data = request.data.copy()
+        mutable_data['vendor'] = authenticated_user_id
+
+        serializer = StoreSerializer(data=mutable_data)
+        if serializer.is_valid():
+            serializer.save()
             return JsonResponse(
-                {'error': 'Vendor username not found.'},
-                status=status.HTTP_400_BAD_REQUEST
+                serializer.data,
+                status=status.HTTP_201_CREATED
             )
-
-        # Check if the authenticated user's ID
-        # matches the vendor ID from the payload
-        # IMPROVED: The original logic now correctly
-        # checks the authenticated user's ID against the vendor ID.
-        if authenticated_user_id == vendor_id_from_payload:
-            # Create a mutable copy of the request data to add the vendor ID
-            mutable_data = request.data.copy()
-            mutable_data['vendor'] = authenticated_user_id
-
-            serializer = StoreSerializer(data=mutable_data)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(
-                    serializer.data,
-                    status=status.HTTP_201_CREATED
-                )
-            return JsonResponse(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
         return JsonResponse(
-            {
-                'ID mismatch': (
-                    'User ID and vendor username do not match.'
-                )
-            },
+            serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -107,16 +82,16 @@ def add_product_api(request):
 
         # IMPROVED: Look up the store and check for a duplicate product name
         try:
-            store = Store.objects.get(
-                name=store_name,
-                vendor=authenticated_user_id
-            )
+            # IMPROVED: Use request.user directly for the foreign key check
+            store = Store.objects.get(name=store_name, vendor=request.user)
             if Product.objects.filter(name=product_name, store=store).exists():
                 return JsonResponse(
                     {
                         'error': (
-                            'A product with this name already exists '
-                            'in this store.'
+                            (
+                                'A product with this name already exists '
+                                'in this store.'
+                            )
                         )
                     },
                     status=status.HTTP_400_BAD_REQUEST
@@ -125,10 +100,8 @@ def add_product_api(request):
             return JsonResponse(
                 {
                     'error': (
-                        (
-                            'You do not have permission to add a product '
-                            'to this store.'
-                        )
+                        'You do not have permission to add a product to '
+                        'this store.'
                     )
                 },
                 status=status.HTTP_403_FORBIDDEN
