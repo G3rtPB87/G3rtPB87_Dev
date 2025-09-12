@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Create Newsletter - The GB Daily{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-2xl p-8 space-y-6 bg-white rounded-xl shadow-2xl">
+        <h2 class="text-3xl font-extrabold text-center text-gray-900 header-font">
+            Create a New Newsletter
+        </h2>
+        
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <div>
+                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-200">
+                    Submit Newsletter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

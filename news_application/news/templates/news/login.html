@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Login - The GB Daily{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-2xl transform transition-transform duration-300 hover:scale-105">
+        <h2 class="text-3xl font-extrabold text-center text-gray-900 header-font">
+            Sign in to your account
+        </h2>
+        
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
+                    <p class="font-bold">Authentication failed</p>
+                    <p class="block sm:inline">Please check your username and password.</p>
+                </div>
+            {% endif %}
+
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div>
+                    <label for="username" class="sr-only">Username</label>
+                    <input id="username" name="username" type="text" autocomplete="username" required class="appearance-none rounded-t-md relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Username">
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-b-md relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                    <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                        Remember me
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-200">
+                    Sign in
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-6 text-center text-gray-600">
+            <p>
+                Don't have an account?
+                <a href="{% url 'register' %}" class="font-medium text-gray-800 hover:text-gray-900">
+                    Sign up here
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

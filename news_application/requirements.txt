@@ -1,0 +1,12 @@
+asgiref==3.9.1
+certifi==2025.8.3
+charset-normalizer==3.4.3
+Django==5.2.6
+djangorestframework==3.16.1
+idna==3.10
+mysqlclient==2.2.7
+oauthlib==3.3.1
+requests==2.32.5
+requests-oauthlib==2.0.0
+sqlparse==0.5.3
+urllib3==2.5.0

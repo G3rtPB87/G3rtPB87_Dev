@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - The GB Daily{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-xl">
+    <header class="text-center mb-10">
+        <h1 class="text-5xl font-extrabold header-font text-gray-900 leading-tight">
+            Your Personalized Dashboard
+        </h1>
+        <p class="mt-4 text-xl text-gray-600">
+            Welcome, {{ user.username }}. Here are the latest articles and newsletters from your subscriptions.
+        </p>
+    </header>
+
+    <div class="space-y-8">
+        {% if articles or newsletters %}
+            {% if articles %}
+                <h2 class="text-3xl font-bold header-font text-gray-800 mb-4">Your Subscribed Articles</h2>
+                {% for article in articles %}
+                <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold header-font text-gray-900 mb-2">
+                        <a href="{% url 'article_detail' article_id=article.id %}" class="hover:underline">
+                            {{ article.title }}
+                        </a>
+                    </h2>
+                    <p class="text-gray-700 mt-2">
+                        {{ article.content|truncatechars:200 }}
+                    </p>
+                    <div class="mt-4 text-sm text-gray-500">
+                        <span class="font-semibold">By: {{ article.author.username }}</span> | 
+                        <span>Published: {{ article.created_at|date:"F j, Y" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if newsletters %}
+                <h2 class="text-3xl font-bold header-font text-gray-800 mb-4 mt-8">Your Subscribed Newsletters</h2>
+                {% for newsletter in newsletters %}
+                <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold header-font text-gray-900 mb-2">
+                        {{ newsletter.title }}
+                    </h2>
+                    <p class="text-gray-700 mt-2">
+                        {{ newsletter.content|truncatechars:200 }}
+                    </p>
+                    <div class="mt-4 text-sm text-gray-500">
+                        <span class="font-semibold">By: {{ newsletter.author.username }}</span> | 
+                        <span>Published: {{ newsletter.created_at|date:"F j, Y" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            <div class="text-center text-gray-500">
+                <p class="text-xl">You are not subscribed to any publications or journalists yet. Start subscribing to see your personalized news feed here!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

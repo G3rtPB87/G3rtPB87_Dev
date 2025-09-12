@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Home - The GB News Daily{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-xl">
+    <header class="text-center mb-10">
+        <h1 class="text-6xl font-extrabold header-font text-gray-900 leading-tight">
+            Welcome to The GB News Daily
+        </h1>
+        <p class="mt-4 text-xl text-gray-600">
+            Your source for curated news and independent journalism. Only good news!
+        </p>
+        {% if user.is_authenticated %}
+        <p class="mt-4 text-md text-gray-700">
+            You are logged in as **{{ user.username }}** (Role: **{{ user.role|capfirst }}**)
+        </p>
+        {% endif %}
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-8">
+            <h2 class="text-3xl font-bold header-font text-gray-800 mb-4">Latest Articles</h2>
+            {% if articles %}
+                {% for article in articles %}
+                <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold header-font text-gray-900 mb-2">
+                        <a href="{% url 'article_detail' article_id=article.id %}" class="hover:underline">
+                            {{ article.title }}
+                        </a>
+                    </h3>
+                    {% if user.is_authenticated %}
+                    <p class="text-gray-700">
+                        {{ article.content|safe }}
+                    </p>
+                    {% else %}
+                    <p class="text-gray-700">
+                        {{ article.content|truncatechars:200 }}
+                    </p>
+                    <div class="mt-4 text-center">
+                        <a href="{% url 'login' %}" class="inline-block bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200">
+                            Login to Read More
+                        </a>
+                    </div>
+                    {% endif %}
+                    <div class="mt-4 text-sm text-gray-500">
+                        <span class="font-semibold">By: {{ article.author.username }}</span> | <span>Published: {{ article.created_at|date:"F j, Y" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center text-gray-500">
+                    <p class="text-xl">No approved articles to display yet.</p>
+                </div>
+            {% endif %}
+
+            <h2 class="text-3xl font-bold header-font text-gray-800 mb-4 mt-12">Latest Newsletters</h2>
+            {% if newsletters %}
+                {% for newsletter in newsletters %}
+                <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold header-font text-gray-900 mb-2">
+                        {{ newsletter.title }}
+                    </h3>
+                    {% if user.is_authenticated %}
+                    <p class="text-gray-700">
+                        {{ newsletter.content|safe }}
+                    </p>
+                    {% else %}
+                    <p class="text-gray-700">
+                        {{ newsletter.content|truncatechars:200 }}
+                    </p>
+                    <div class="mt-4 text-center">
+                        <a href="{% url 'login' %}" class="inline-block bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200">
+                            Login to Read More
+                        </a>
+                    </div>
+                    {% endif %}
+                    <div class="mt-4 text-sm text-gray-500">
+                        <span class="font-semibold">By: {{ newsletter.author.username }}</span> | <span>Published: {{ newsletter.created_at|date:"F j, Y" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center text-gray-500">
+                    <p class="text-xl">No approved newsletters to display yet.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <aside class="space-y-6">
+            <h2 class="text-3xl font-bold header-font text-gray-800 mb-4">
+                Publishers
+            </h2>
+            {% if publishers %}
+                {% for publisher in publishers %}
+                <div class="bg-gray-100 p-4 rounded-lg shadow-md flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            {{ publisher.name }}
+                        </h3>
+                    </div>
+                    {% if user.is_authenticated and user.role.lower == 'reader' %}
+                    <form action="{% url 'subscribe' subscription_type='publisher' pk=publisher.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-gray-800 text-white px-3 py-1 text-sm rounded-lg hover:bg-gray-700 transition duration-200">
+                            {% if publisher in user.subscriptions_publishers.all %}
+                                Unsubscribe
+                            {% else %}
+                                Subscribe
+                            {% endif %}
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                    <p class="text-sm text-gray-500">No publishers available.</p>
+                </div>
+            {% endif %}
+
+            <h2 class="text-3xl font-bold header-font text-gray-800 mb-4 mt-8">
+                Journalists
+            </h2>
+            {% if journalists %}
+                {% for journalist in journalists %}
+                <div class="bg-gray-100 p-4 rounded-lg shadow-md flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            {{ journalist.username }}
+                        </h3>
+                    </div>
+                    {% if user.is_authenticated and user.role.lower == 'reader' %}
+                    <form action="{% url 'subscribe' subscription_type='journalist' pk=journalist.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-gray-800 text-white px-3 py-1 text-sm rounded-lg hover:bg-gray-700 transition duration-200">
+                            {% if journalist in user.subscriptions_journalists.all %}
+                                Unsubscribe
+                            {% else %}
+                                Subscribe
+                            {% endif %}
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center text-gray-500">
+                    <p class="text-sm text-gray-500">No journalists available.</p>
+                </div>
+            {% endif %}
+        </aside>
+    </div>
+</div>
+{% endblock %}

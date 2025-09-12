@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} - The GB Daily{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-xl">
+    <header class="text-center mb-6">
+        <h1 class="text-4xl md:text-5xl font-extrabold header-font text-gray-900 leading-tight">
+            {{ article.title }}
+        </h1>
+        <div class="mt-4 text-sm text-gray-500">
+            <span class="font-semibold">By: {{ article.author.username }}</span> | <span>Published: {{ article.created_at|date:"F j, Y" }}</span>
+        </div>
+    </header>
+
+    <div class="prose max-w-none">
+        <p>{{ article.content|safe }}</p>
+    </div>
+
+    <div class="mt-8 border-t pt-6 text-sm text-gray-600">
+        <p>This article was published by {{ article.publisher.name }}.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Content Management - The Daily Pulse{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-xl">
+    <header class="text-center mb-10">
+        <h1 class="text-5xl font-extrabold header-font text-gray-900 leading-tight">
+            Content Management
+        </h1>
+        <p class="mt-4 text-xl text-gray-600">
+            Manage all approved articles and newsletters.
+        </p>
+    </header>
+
+    <div class="mb-10">
+        <h2 class="text-3xl font-bold header-font text-gray-800 mb-6">Approved Articles</h2>
+        {% if articles %}
+        <div class="space-y-8">
+            {% for article in articles %}
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-bold header-font text-gray-900 mb-2">
+                    {{ article.title }}
+                </h3>
+                <p class="text-gray-700">
+                    {{ article.content|truncatechars:200 }}
+                </p>
+                <div class="mt-4 text-sm text-gray-500">
+                    <span class="font-semibold">By: {{ article.author.username }}</span> | <span>Published: {{ article.created_at|date:"F j, Y" }}</span>
+                </div>
+                <div class="mt-4 flex space-x-4">
+                    <a href="{% url 'article_detail' article_id=article.id %}" class="text-blue-500 hover:text-blue-600 transition duration-200">View</a>
+                    <a href="{% url 'edit_article' pk=article.id %}" class="text-yellow-500 hover:text-yellow-600 transition duration-200">Edit</a>
+                    <a href="{% url 'delete_article' pk=article.id %}" class="text-red-500 hover:text-red-600 transition duration-200">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center text-gray-500">
+            <p class="text-xl">No approved articles to display.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2 class="text-3xl font-bold header-font text-gray-800 mb-6">Approved Newsletters</h2>
+        {% if newsletters %}
+        <div class="space-y-8">
+            {% for newsletter in newsletters %}
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-bold header-font text-gray-900 mb-2">
+                    {{ newsletter.title }}
+                </h3>
+                <p class="text-gray-700">
+                    {{ newsletter.content|truncatechars:200 }}
+                </p>
+                <div class="mt-4 text-sm text-gray-500">
+                    <span class="font-semibold">By: {{ newsletter.author.username }}</span> | <span>Published: {{ newsletter.created_at|date:"F j, Y" }}</span>
+                </div>
+                <div class="mt-4 flex space-x-4">
+                    <a href="{% url 'edit_newsletter' pk=newsletter.id %}" class="text-blue-500 hover:text-blue-600 transition duration-200">View</a>
+                    <a href="{% url 'edit_newsletter' pk=newsletter.id %}" class="text-yellow-500 hover:text-yellow-600 transition duration-200">Edit</a>
+                    <a href="{% url 'delete_newsletter' pk=newsletter.id %}" class="text-red-500 hover:text-red-600 transition duration-200">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center text-gray-500">
+            <p class="text-xl">No approved newsletters to display.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const forms = document.querySelectorAll('.approval-form');
+        forms.forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const url = form.dataset.url;
+                const csrfToken = form.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({})
+                    });
+
+                    if (response.ok) {
+                        // Reload the page to show the updated list
+                        window.location.reload();
+                    } else {
+                        const errorData = await response.json();
+                        alert(`Error: ${errorData.error || 'Something went wrong.'}`);
+                    }
+                } catch (error) {
+                    alert('An unexpected error occurred.');
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

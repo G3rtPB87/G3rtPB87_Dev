@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Delete {{ type|capfirst }} - The GB Daily{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-2xl">
+        <h2 class="text-3xl font-extrabold text-center text-gray-900 header-font">
+            Confirm Deletion
+        </h2>
+        <p class="text-center text-gray-700">
+            Are you sure you want to delete the {{ type }} titled **"{{ item.title }}"**?
+        </p>
+        <p class="text-center text-red-500 font-semibold">
+            This action cannot be undone.
+        </p>
+        
+        <form method="post" class="space-y-4 text-center">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition duration-200">
+                Yes, Delete
+            </button>
+            <a href="{% url 'journalist_dashboard' %}" class="inline-block bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition duration-200 ml-4">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

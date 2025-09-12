@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "YOUR_POSTMAN_ID_HERE",
+		"name": "News Application API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Subscribed Articles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/articles/subscribed/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"articles",
+						"subscribed",
+						""
+					]
+				},
+				"description": "Retrieves a list of approved articles that the logged-in user is subscribed to. Requires a logged-in user with a 'reader' role. Authentication is handled by Django sessions."
+			},
+			"response": []
+		},
+		{
+			"name": "Subscribed Newsletters",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/newsletters/subscribed/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"newsletters",
+						"subscribed",
+						""
+					]
+				},
+				"description": "Retrieves a list of approved newsletters that the logged-in user is subscribed to. Requires a logged-in user with a 'reader' role. Authentication is handled by Django sessions."
+			},
+			"response": []
+		},
+		{
+			"name": "Approve Article",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "",
+						"type": "text",
+						"description": "Get this from a CSRF cookie or hidden input on the login page."
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/articles/approve/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"articles",
+						"approve",
+						"1",
+						""
+					]
+				},
+				"description": "Approves an article. This action can only be performed by a logged-in user with an 'editor' role. The article_id should be replaced with the ID of the article to be approved."
+			},
+			"response": []
+		},
+		{
+			"name": "Approve Newsletter",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "",
+						"type": "text",
+						"description": "Get this from a CSRF cookie or hidden input on the login page."
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/newsletters/approve/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"newsletters",
+						"approve",
+						"1",
+						""
+					]
+				},
+				"description": "Approves a newsletter. This action can only be performed by a logged-in user with an 'editor' role. The newsletter_id should be replaced with the ID of the newsletter to be approved."
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Editor Dashboard - The Daily Pulse{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-xl">
+    <header class="text-center mb-10">
+        <h1 class="text-5xl font-extrabold header-font text-gray-900 leading-tight">
+            Editor Dashboard
+        </h1>
+        <p class="mt-4 text-xl text-gray-600">
+            Review and approve articles and newsletters submitted by journalists.
+        </p>
+    </header>
+
+    <div class="mb-10">
+        <h2 class="text-3xl font-bold header-font text-gray-800 mb-6">Unapproved Articles</h2>
+        {% if articles %}
+        <div class="space-y-8">
+            {% for article in articles %}
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-bold header-font text-gray-900 mb-2">
+                    {{ article.title }}
+                </h3>
+                <p class="text-gray-700">
+                    {{ article.content|truncatechars:200 }}
+                </p>
+                <div class="mt-4 text-sm text-gray-500">
+                    <span class="font-semibold">By: {{ article.author.username }}</span> | <span>Submitted: {{ article.created_at|date:"F j, Y" }}</span>
+                </div>
+                <form class="approval-form mt-4" data-url="{% url 'article_approval' article_id=article.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="approve-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200">
+                        Approve Article
+                    </button>
+                    <span class="loading-message text-blue-500 ml-4 hidden">Approving...</span>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center text-gray-500">
+            <p class="text-xl">No new articles to review.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2 class="text-3xl font-bold header-font text-gray-800 mb-6">Unapproved Newsletters</h2>
+        {% if newsletters %}
+        <div class="space-y-8">
+            {% for newsletter in newsletters %}
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-bold header-font text-gray-900 mb-2">
+                    {{ newsletter.title }}
+                </h3>
+                <p class="text-gray-700">
+                    {{ newsletter.content|truncatechars:200 }}
+                </p>
+                <div class="mt-4 text-sm text-gray-500">
+                    <span class="font-semibold">By: {{ newsletter.author.username }}</span> | <span>Submitted: {{ newsletter.created_at|date:"F j, Y" }}</span>
+                </div>
+                <form class="approval-form mt-4" data-url="{% url 'newsletter_approval' newsletter_id=newsletter.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="approve-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200">
+                        Approve Newsletter
+                    </button>
+                    <span class="loading-message text-blue-500 ml-4 hidden">Approving...</span>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center text-gray-500">
+            <p class="text-xl">No new newsletters to review.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const forms = document.querySelectorAll('.approval-form');
+        forms.forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const button = form.querySelector('.approve-button');
+                const loadingMessage = form.querySelector('.loading-message');
+
+                button.disabled = true;
+                loadingMessage.classList.remove('hidden');
+
+                const url = form.dataset.url;
+                const csrfToken = form.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({})
+                    });
+
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        const errorData = await response.json();
+                        alert(`Error: ${errorData.error || 'Something went wrong.'}`);
+                        button.disabled = false;
+                        loadingMessage.classList.add('hidden');
+                    }
+                } catch (error) {
+                    alert('An unexpected error occurred.');
+                    console.error('Error:', error);
+                    button.disabled = false;
+                    loadingMessage.classList.add('hidden');
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}
