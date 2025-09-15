@@ -4,17 +4,18 @@
 
 \---
 
-\#\# Table of Contents  
-\- \[Features\](\#features)  
-\- \[Technology Stack\](\#technology-in-use)  
-\- \[Installation\](\#installation)  
-\- \[Database Setup\](\#database-setup)  
-\- \[Configuration\](\#configuration)  
-\- \[Usage\](\#usage)  
-\- \[API Documentation\](\#api-documentation)  
-\- \[Testing\](\#testing)  
-\- \[Troubleshooting\](\#troubleshooting)  
-\- \[License\](\#license)
+## Table of Contents
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Database Setup](#database-setup)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+- [Support](#support)
 
 \#\#\# Features
 
