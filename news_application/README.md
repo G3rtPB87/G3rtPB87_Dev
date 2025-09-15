@@ -17,7 +17,7 @@
 - [License](#license)
 - [Support](#support)
 
-\#\#\# Features
+## Features
 
 * # Custom User Roles: Differentiated roles for Reader, Journalist, and Editor.
 
@@ -29,30 +29,30 @@
 * Automated Dissemination: Approved content is automatically sent to subscribers via email and posted to an X (formerly Twitter) account using signals.  
 * RESTful API: An API for third-party clients to retrieve content based on subscriptions.
 
-\#\#\# Content Management  
+### Content Management  
 \- Article creation and editing.  
 \- Newsletter management.  
 \- Content approval workflow.  
 \- Automated publishing system.
 
-\#\#\# Subscription Service  
+\### Subscription Service  
 \- Users can subscribe to publishers and journalists.  
 \- Personalized content feeds.  
 \- Email notifications for new content.
 
-\#\#\# Automated Distribution  
+### Automated Distribution  
 \- Automatic posting to X (Twitter) upon content approval.  
 \- Email notifications to subscribers.  
 \- Social media integration.
 
-\#\#\# RESTful API  
+### RESTful API  
 \- A comprehensive \*\*API\*\* for third-party integrations.  
 \- Subscription-based content access.  
 \- Role-based API permissions.
 
 \---
 
-\#\# Technology Stack  
+## Technology Stack  
 \- \*\*Backend\*\*: Django 4.2+, Django REST Framework  
 \- \*\*Database\*\*: MariaDB/MySQL  
 \- \*\*Frontend\*\*: HTML5, Tailwind CSS, JavaScript  
@@ -63,14 +63,14 @@
 
 \---
 
-\#\# Installation  
-\#\#\# Prerequisites  
+## Installation  
+### Prerequisites  
 \- Python 3.8+  
 \- MariaDB Server  
 \- pip (Python package manager)  
 \- Virtualenv (recommended)
 
-\#\#\# Step 1: Clone the Repository  
+### Step 1: Clone the Repository  
 \`\`\`bash  
 git clone \[https://github.com/G3rtPB87/G3rtPB87\_Dev.git\](https://github.com/G3rtPB87/G3rtPB87\_Dev.git)  
 cd G3rtPB87\_Dev
