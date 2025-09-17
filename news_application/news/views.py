@@ -517,7 +517,9 @@ class NewsletterApprovalView(APIView):
                 status=status.HTTP_200_OK
             )
         except Exception as e:
+            import logging
+            logging.exception("Error approving newsletter")
             return Response(
-                {"error": str(e)},
+                {"error": "An internal error has occurred. Please try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
