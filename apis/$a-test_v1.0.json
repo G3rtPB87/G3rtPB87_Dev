@@ -1,0 +1,10 @@
+{
+  "title": "$A-Test",
+  "version": "v1.0",
+  "description": "This is an API to test API to get Dashboard Stats",
+  "endpoint_url": "https://httpbin.org",
+  "method": "GET",
+  "category": "3",
+  "status": "beta",
+  "documentation": "# New API"
+}
