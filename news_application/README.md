@@ -1,22 +1,24 @@
+<a id="top"></a>
 \# News Application Platform
 
 # This is a Django-based news application that serves as a platform for independent journalists and publishers. It features a robust user management system with distinct roles, a subscription service for readers, and an automated content dissemination system.
 
 \---
 
-\#\# Table of Contents  
-\- \[Features\](\#features)  
-\- \[Technology Stack\](\#technology-in-use)  
-\- \[Installation\](\#installation)  
-\- \[Database Setup\](\#database-setup)  
-\- \[Configuration\](\#configuration)  
-\- \[Usage\](\#usage)  
-\- \[API Documentation\](\#api-documentation)  
-\- \[Testing\](\#testing)  
-\- \[Troubleshooting\](\#troubleshooting)  
-\- \[License\](\#license)
+## Table of Contents
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Database Setup](#database-setup)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+- [Support](#support)
 
-\#\#\# Features
+## Features                                                                                                                            [Back to Top](#top)
 
 * # Custom User Roles: Differentiated roles for Reader, Journalist, and Editor.
 
@@ -28,30 +30,30 @@
 * Automated Dissemination: Approved content is automatically sent to subscribers via email and posted to an X (formerly Twitter) account using signals.  
 * RESTful API: An API for third-party clients to retrieve content based on subscriptions.
 
-\#\#\# Content Management  
+### Content Management                                                                                                               
 \- Article creation and editing.  
 \- Newsletter management.  
 \- Content approval workflow.  
 \- Automated publishing system.
 
-\#\#\# Subscription Service  
+### Subscription Service                                                                                                               
 \- Users can subscribe to publishers and journalists.  
 \- Personalized content feeds.  
 \- Email notifications for new content.
 
-\#\#\# Automated Distribution  
+### Automated Distribution  
 \- Automatic posting to X (Twitter) upon content approval.  
 \- Email notifications to subscribers.  
 \- Social media integration.
 
-\#\#\# RESTful API  
+### RESTful API  
 \- A comprehensive \*\*API\*\* for third-party integrations.  
 \- Subscription-based content access.  
 \- Role-based API permissions.
 
 \---
 
-\#\# Technology Stack  
+## Technology Stack                                                                                                                    [Back to Top](#top) 
 \- \*\*Backend\*\*: Django 4.2+, Django REST Framework  
 \- \*\*Database\*\*: MariaDB/MySQL  
 \- \*\*Frontend\*\*: HTML5, Tailwind CSS, JavaScript  
@@ -62,14 +64,14 @@
 
 \---
 
-\#\# Installation  
-\#\#\# Prerequisites  
+## Installation                                                                                                                        [Back to Top](#top) 
+### Prerequisites  
 \- Python 3.8+  
 \- MariaDB Server  
 \- pip (Python package manager)  
 \- Virtualenv (recommended)
 
-\#\#\# Step 1: Clone the Repository  
+### Step 1: Clone the Repository  
 \`\`\`bash  
 git clone \[https://github.com/G3rtPB87/G3rtPB87\_Dev.git\](https://github.com/G3rtPB87/G3rtPB87\_Dev.git)  
 cd G3rtPB87\_Dev
@@ -92,7 +94,7 @@ pip install \-r requirements.txt
 
 ---
 
-## **Database Setup**
+## **Database Setup**                                                                                                                [Back to Top](#top)
 
 ### **Step 1: Create a MariaDB Database**
 
@@ -125,7 +127,7 @@ DATABASES \= {
 
 ---
 
-## **Configuration**
+## **Configuration**                                                                                                                    [Back to Top](#top)
 
 ### **Environment Variables**
 
@@ -177,7 +179,7 @@ python manage.py runserver
 
 ---
 
-## **Usage**
+## **Usage**                                                                                                                            [Back to Top](#top)
 
 ### **Access Points**
 
@@ -213,7 +215,7 @@ python manage.py runserver
 
 ## 
 
-## **API Documentation**
+## **API Documentation**                                                                                                                [Back to Top](#top)
 
 ### **Authentication Required Endpoints**
 
@@ -240,7 +242,7 @@ fetch('/api/articles/subscribed/', {
 
 ---
 
-## **Testing**
+## **Testing**                                                                                                                            [Back to Top](#top)
 
 ### **Run the Complete Test Suite**
 
@@ -274,7 +276,7 @@ coverage html
 
 ---
 
-## **Troubleshooting**
+## **Troubleshooting**                                                                                                                    [Back to Top](#top)
 
 ### **Common Issues**
 
@@ -288,7 +290,7 @@ mysql \-u root \-p \-e "SHOW GRANTS FOR 'news\_user'@'localhost';"
 
 * 
 
-**Migration Issues**:  
+**Migration Issues**:                                                                                                                    
 Bash  
 \# Reset migrations if needed  
 python manage.py makemigrations \--reset  
@@ -320,13 +322,13 @@ python manage.py collectstatic \--noinput
 
 ---
 
-## **License**
+## **License**                                                                                                                            [Back to Top](#top)
 
 This project is licensed under the **Unlicense License** \- see the `LICENSE` file for details.
 
 ---
 
-## **Support**
+## **Support**                                                                                                                            [Back to Top](#top)
 
 For support and questions:
 
