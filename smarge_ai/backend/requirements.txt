@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+langchain
+langchain-google-genai
+python-dotenv
+pydantic
+requests
+sqlalchemy[asyncio]
+aiosqlite
+alembic
+python-jose[cryptography]
+bcrypt
+python-multipart>=2.31.0
