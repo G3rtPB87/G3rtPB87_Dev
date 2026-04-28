@@ -1,0 +1,8 @@
+# Core (required)
+pyodbc>=4.0.39
+
+# Optional but recommended
+python-dotenv>=1.0.0   # load .env automatically
+streamlit>=1.35.0      # web log viewer
+rich>=13.0.0           # pretty CLI tables
+sqlalchemy>=2.0.0      # ORM engine helper (optional)
