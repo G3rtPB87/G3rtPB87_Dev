@@ -1,0 +1,136 @@
+{% extends "tracker/base.html" %}
+{% load dict_extras %}
+{% block title %}Dashboard · Nexus Logs{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm p-4 mb-5">
+  <form method="get" class="flex flex-wrap items-end gap-3">
+    <div>
+      <label class="block text-xs font-medium text-slate-500 mb-1">From</label>
+      <input type="date" name="start_date" value="{{ start_date|date:'Y-m-d' }}"
+             class="border border-slate-300 rounded-lg px-2 py-1.5 text-sm">
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-slate-500 mb-1">To</label>
+      <input type="date" name="end_date" value="{{ end_date|date:'Y-m-d' }}"
+             class="border border-slate-300 rounded-lg px-2 py-1.5 text-sm">
+    </div>
+    <label class="flex items-center gap-1.5 text-sm text-slate-600 pb-2">
+      <input type="checkbox" name="show_home" value="1" {% if show_home %}checked{% endif %}>
+      Show home visits
+    </label>
+    <button type="submit" class="bg-slate-800 text-white text-sm px-4 py-1.5 rounded-lg hover:bg-slate-700">
+      Filter
+    </button>
+    <a href="{% url 'export' %}?start_date={{ start_date|date:'Y-m-d' }}&end_date={{ end_date|date:'Y-m-d' }}"
+       class="ml-auto bg-brand-600 text-white text-sm px-4 py-1.5 rounded-lg hover:bg-brand-700">
+      Export ({{ config.default_export_format|upper }})
+    </a>
+  </form>
+</div>
+
+{% if not has_entries %}
+  <div class="bg-white rounded-xl shadow-sm p-8 text-center text-slate-500">
+    <p class="mb-3">No timeline entries in this date range yet.</p>
+    <a href="{% url 'upload_timeline' %}" class="text-brand-600 font-medium hover:underline">Upload a Timeline.json export</a>
+    or
+    <a href="{% url 'manual_entry' %}" class="text-brand-600 font-medium hover:underline">add a job manually</a>.
+  </div>
+{% endif %}
+
+{% for day in day_summaries %}
+  <div class="mb-6">
+    <div class="flex items-baseline justify-between mb-2 px-1">
+      <h2 class="text-lg font-semibold text-slate-800">{{ day.date|date:"l, j F Y" }}</h2>
+      <div class="text-xs text-slate-500">
+        {{ day.visit_count }} visit{{ day.visit_count|pluralize }} ·
+        {{ day.drive_km }} km driven ·
+        {{ day.drive_minutes }} min driving
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm divide-y divide-slate-100">
+      {% for entry in day.entries %}
+        {% if entry.entry_type == "drive" %}
+          <div class="flex items-center gap-3 px-4 py-3 text-sm text-slate-500">
+            <span class="text-lg">🚗</span>
+            <span>
+              Driving
+              {% if entry.distance_km %}· {{ entry.distance_km }} km{% endif %}
+              · {{ entry.duration_minutes }} min
+            </span>
+            <span class="ml-auto text-xs">
+              {{ entry.start_time|time:"H:i" }} – {{ entry.end_time|time:"H:i" }}
+            </span>
+            {% if entry.source == "manual" %}
+              <span class="text-[10px] uppercase tracking-wide bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">manual</span>
+            {% endif %}
+          </div>
+        {% else %}
+          <details class="group px-4 py-3">
+            <summary class="flex items-start gap-3 cursor-pointer list-none">
+              <span class="text-lg mt-0.5">📍</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-medium text-slate-800">{{ entry.display_name }}</span>
+                  {% if entry.source == "manual" %}
+                    <span class="text-[10px] uppercase tracking-wide bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">manual</span>
+                  {% endif %}
+                  {% if entry.parts_used or entry.comments %}
+                    <span class="text-[10px] uppercase tracking-wide bg-green-100 text-green-700 px-1.5 py-0.5 rounded">job logged</span>
+                  {% endif %}
+                </div>
+                {% if entry.address %}<div class="text-xs text-slate-500">{{ entry.address }}</div>{% endif %}
+                <div class="text-xs text-slate-500">
+                  {{ entry.start_time|time:"H:i" }} – {{ entry.end_time|time:"H:i" }}
+                  ({{ entry.duration_minutes }} min)
+                  {% if entry.maps_link %}
+                    · <a href="{{ entry.maps_link }}" target="_blank" rel="noopener"
+                         class="text-brand-600 hover:underline" onclick="event.stopPropagation()">map</a>
+                  {% endif %}
+                </div>
+              </div>
+              <span class="text-slate-400 group-open:rotate-180 transition-transform">▾</span>
+            </summary>
+
+            <div class="mt-3 pl-8">
+              {% with form=day.job_forms|get_item:entry.pk %}
+                <form method="post" action="{% url 'edit_entry' entry.pk %}?next={{ request.get_full_path|urlencode }}" class="space-y-2">
+                  {% csrf_token %}
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div>
+                      <label class="block text-xs font-medium text-slate-500 mb-1">Location name</label>
+                      {{ form.location_name }}
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-slate-500 mb-1">Address</label>
+                      {{ form.address }}
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Parts used (one per line)</label>
+                    {{ form.parts_used }}
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Comments / issues</label>
+                    {{ form.comments }}
+                  </div>
+                  <div class="flex justify-between items-center pt-1">
+                    <button type="submit" class="bg-brand-600 text-white text-sm px-4 py-1.5 rounded-lg hover:bg-brand-700">
+                      Save job details
+                    </button>
+                  </div>
+                </form>
+                <form method="post" action="{% url 'delete_entry' entry.pk %}?next={{ request.get_full_path|urlencode }}"
+                      onsubmit="return confirm('Delete this visit and its job details?');" class="mt-2">
+                  {% csrf_token %}
+                  <button type="submit" class="text-xs text-red-600 hover:underline">Delete this entry</button>
+                </form>
+              {% endwith %}
+            </div>
+          </details>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}

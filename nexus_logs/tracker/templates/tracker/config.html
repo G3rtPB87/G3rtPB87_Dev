@@ -1,0 +1,24 @@
+{% extends "tracker/base.html" %}
+{% block title %}Settings · Nexus Logs{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm p-5 max-w-lg mx-auto">
+  <h1 class="text-lg font-semibold mb-4">Settings</h1>
+
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    <div>
+      <label class="block text-xs font-medium text-slate-500 mb-1">Default export format</label>
+      {{ form.default_export_format }}
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-slate-500 mb-1">Home address</label>
+      {{ form.home_address }}
+      <p class="text-xs text-slate-400 mt-1">{{ form.home_address.help_text }}</p>
+    </div>
+    <button type="submit" class="bg-brand-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-brand-700">
+      Save settings
+    </button>
+  </form>
+</div>
+{% endblock %}

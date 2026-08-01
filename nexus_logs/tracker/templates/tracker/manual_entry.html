@@ -1,0 +1,62 @@
+{% extends "tracker/base.html" %}
+{% block title %}Add Missing Job · Nexus Logs{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm p-5 max-w-lg mx-auto">
+  <h1 class="text-lg font-semibold mb-1">Add Missing Job</h1>
+  <p class="text-sm text-slate-500 mb-4">
+    Use this when the phone lost signal or the battery died and a job site
+    never made it into the Google Timeline export.
+  </p>
+
+  <form method="post" class="space-y-3">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <p class="text-xs text-red-600">{{ form.non_field_errors|join:", " }}</p>
+    {% endif %}
+
+    <div>
+      <label class="block text-xs font-medium text-slate-500 mb-1">Location name / address</label>
+      {{ form.location_name }}
+      {% if form.location_name.errors %}<p class="text-xs text-red-600 mt-1">{{ form.location_name.errors|join:", " }}</p>{% endif %}
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-slate-500 mb-1">Address (optional)</label>
+      {{ form.address }}
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div>
+        <label class="block text-xs font-medium text-slate-500 mb-1">Arrival time</label>
+        {{ form.arrival_time }}
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-slate-500 mb-1">Departure time</label>
+        {{ form.departure_time }}
+      </div>
+    </div>
+    {% if form.arrival_time.errors or form.departure_time.errors %}
+      <p class="text-xs text-red-600">{{ form.arrival_time.errors|join:", " }} {{ form.departure_time.errors|join:", " }}</p>
+    {% endif %}
+
+    <div>
+      <label class="block text-xs font-medium text-slate-500 mb-1">{{ form.estimated_drive_minutes.label }}</label>
+      {{ form.estimated_drive_minutes }}
+      <p class="text-xs text-slate-400 mt-1">{{ form.estimated_drive_minutes.help_text }}</p>
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-slate-500 mb-1">Parts used</label>
+      {{ form.parts_used }}
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-slate-500 mb-1">Comments / issues</label>
+      {{ form.comments }}
+    </div>
+
+    <button type="submit" class="bg-brand-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-brand-700">
+      Save job
+    </button>
+  </form>
+</div>
+{% endblock %}

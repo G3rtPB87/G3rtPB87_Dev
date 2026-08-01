@@ -1,0 +1,27 @@
+{% extends "tracker/base.html" %}
+{% block title %}Upload Timeline · Nexus Logs{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm p-5 max-w-lg mx-auto">
+  <h1 class="text-lg font-semibold mb-1">Upload Timeline</h1>
+  <p class="text-sm text-slate-500 mb-4">
+    On your phone: Google Maps → Timeline → Settings → Export Timeline data.
+    Upload the resulting <code class="bg-slate-100 px-1 rounded">Timeline.json</code>
+    or <code class="bg-slate-100 px-1 rounded">location-history.json</code> file below.
+    Re-uploading the same export is safe — duplicate entries are skipped automatically.
+  </p>
+
+  <form method="post" enctype="multipart/form-data" class="space-y-3">
+    {% csrf_token %}
+    <div>
+      {{ form.timeline_file }}
+      {% if form.timeline_file.errors %}
+        <p class="text-xs text-red-600 mt-1">{{ form.timeline_file.errors|join:", " }}</p>
+      {% endif %}
+    </div>
+    <button type="submit" class="bg-brand-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-brand-700">
+      Import
+    </button>
+  </form>
+</div>
+{% endblock %}

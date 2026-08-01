@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Nexus Logs{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand: { 600: '#2563eb', 700: '#1d4ed8' } }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen pb-20 md:pb-6">
+
+  <header class="bg-slate-900 text-white sticky top-0 z-10 shadow">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="{% url 'dashboard' %}" class="font-semibold text-lg tracking-tight">⚡ Nexus Logs</a>
+      <nav class="hidden md:flex gap-4 text-sm">
+        <a href="{% url 'dashboard' %}" class="hover:text-brand-600">Dashboard</a>
+        <a href="{% url 'upload_timeline' %}" class="hover:text-brand-600">Upload Timeline</a>
+        <a href="{% url 'manual_entry' %}" class="hover:text-brand-600">Add Missing Job</a>
+        <a href="{% url 'config' %}" class="hover:text-brand-600">Settings</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-5">
+    {% if messages %}
+      <div class="space-y-2 mb-4">
+        {% for message in messages %}
+          <div class="rounded-lg px-4 py-2 text-sm {% if message.tags == 'error' %}bg-red-100 text-red-800{% else %}bg-green-100 text-green-800{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- mobile bottom nav -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 flex justify-around py-2 text-xs">
+    <a href="{% url 'dashboard' %}" class="flex flex-col items-center px-2 py-1 text-slate-600">
+      <span class="text-lg">📋</span>Log
+    </a>
+    <a href="{% url 'upload_timeline' %}" class="flex flex-col items-center px-2 py-1 text-slate-600">
+      <span class="text-lg">📥</span>Upload
+    </a>
+    <a href="{% url 'manual_entry' %}" class="flex flex-col items-center px-2 py-1 text-slate-600">
+      <span class="text-lg">➕</span>Add Job
+    </a>
+    <a href="{% url 'config' %}" class="flex flex-col items-center px-2 py-1 text-slate-600">
+      <span class="text-lg">⚙️</span>Settings
+    </a>
+  </nav>
+</body>
+</html>
